@@ -8,7 +8,7 @@ The project implements a complete **train → model persistence → live predict
 
 ## Repository Structure
 
-.
+
 ├── requirements.txt      # Python dependencies  
 ├── Bhel.py               # Model training and evaluation  
 ├── predict_today.py      # Live market prediction script  
