@@ -49,37 +49,7 @@ Prediction: Latest live 5-minute candle
 
 ## WorkFlow
 
-┌──────────────────────┐
-│      yfinance        │
-│  (Market Data API)   │
-│  • Fetch data        │
-└─────────┬────────────┘
-          │
-          ▼
-┌──────────────────────┐
-│        pandas        │
-│  (Data Processing)   │
-└─────────┬────────────┘
-          │
-          ▼
-┌──────────────────────┐
-│        numpy         │
-└─────────┬────────────┘
-          │
-          ▼
-┌──────────────────────┐
-│   scikit-learn       │
-│  • Train model       │
-│  • Validate results  │
-│  • Predict outcomes  │
-└─────────┬────────────┘
-          │
-          ▼
-┌──────────────────────┐
-│        joblib        │
-│  (Model Storage)     │
-│  • Save model        │     
-└──────────────────────┘
+yfinance → pandas → numpy → scikit-learn → joblib
 
 ---
 
