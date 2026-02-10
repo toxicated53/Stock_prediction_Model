@@ -9,9 +9,9 @@ The project implements a complete **train → model persistence → live predict
 ## Repository Structure
 
 
-├── requirements.txt      # Python dependencies  
-├── Bhel.py               # Model training and evaluation  
-├── predict_today.py      # Live market prediction script  
+├── requirements.txt       
+├── Bhel.py                 
+├── predict_today.py        
 
 ---
 
@@ -47,6 +47,42 @@ Prediction: Latest live 5-minute candle
 
 ---
 
+## WorkFlow
+
+┌──────────────────────┐
+│      yfinance        │
+│  (Market Data API)   │
+│  • Fetch data        │
+└─────────┬────────────┘
+          │
+          ▼
+┌──────────────────────┐
+│        pandas        │
+│  (Data Processing)   │
+└─────────┬────────────┘
+          │
+          ▼
+┌──────────────────────┐
+│        numpy         │
+└─────────┬────────────┘
+          │
+          ▼
+┌──────────────────────┐
+│   scikit-learn       │
+│  • Train model       │
+│  • Validate results  │
+│  • Predict outcomes  │
+└─────────┬────────────┘
+          │
+          ▼
+┌──────────────────────┐
+│        joblib        │
+│  (Model Storage)     │
+│  • Save model        │     
+└──────────────────────┘
+
+---
+
 ## Model Training (Bhel.py)
 
 The training script performs the following steps:
@@ -71,7 +107,7 @@ python Bhel.py
 
 The live prediction script performs real-time inference by:
 
-Loading the trained model (`bhel_minute_model.pkl`)  
+Loading the saved trained model (`bhel_minute_model.pkl`)  
 Fetching live 5-minute market data for BHEL.NS  
 Predicting the next candle return and next close price  
 Calculating percentage price movement  
@@ -95,9 +131,9 @@ Market Bias              : BUY 📈
 
 ## Risk Management
 
-Maximum allowed price movement per 5-minute candle: ±1%  
+Maximum allowed price movement per 5-minute candle is ±1%  
 Predictions exceeding this threshold are automatically rejected  
-A minimum movement threshold helps prevent over-trading during low volatility  
+A minimum movement threshold helps prevent over-trading during low volatility 
 
 ---
 
@@ -107,7 +143,7 @@ Install all required dependencies using:
 
 pip install -r requirements.txt  
 
-Using a virtual environment is strongly recommended.
+Please Use a virtual environment
 
 ---
 
@@ -122,22 +158,14 @@ The author is not responsible for any financial losses incurred.
 
 ## Future Improvements
 
-Add technical indicators (RSI, EMA, MACD, VWAP)  
-Implement a backtesting framework  
-Support multiple stocks  
-Enhance feature engineering  
-Deploy as an API or dashboard  
-Introduce model monitoring and versioning  
+Deploy as a dashboard
+Introduce Model Monitoring
+Graphical Representation of the Current and Next stock close price
+Add multiple stocks
 
----
-
-## Contributing
-
-Contributions are welcome.  
-Fork the repository, create a feature branch, and submit a pull request.
 
 ---
 
 ## Support
 
-If you find this project useful, consider giving it a ⭐ on GitHub.
+If you find this project useful, please give it a ⭐ on GitHub.
