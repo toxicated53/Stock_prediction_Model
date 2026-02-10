@@ -17,12 +17,12 @@ The project implements a complete **train → model persistence → live predict
 
 ## Technologies Used
 
-Python 3.9+  
-Pandas  
-NumPy  
-Scikit-learn  
-yfinance  
-Joblib  
+1. Python 3.9+  
+2. Pandas  
+3. NumPy  
+4. Scikit-learn  
+5. yfinance  
+6. Joblib  
 
 ---
 
