@@ -1,141 +1,190 @@
-# 📈 Stock Price Prediction Model (BHEL – NSE)
+# 📈 Stock Price Forecasting – BHEL (NSE)
 
-This repository contains a **machine learning–based stock prediction system** designed to predict the **next 5-minute candle return** for **BHEL (Bharat Heavy Electricals Limited)** listed on the NSE.
+A time-series forecasting project that predicts the **next trading day’s closing price** of **BHEL (Bharat Heavy Electricals Limited)** listed on the National Stock Exchange (NSE) using an **ARIMA model**.
 
-The project implements a complete **train → model persistence → live prediction** pipeline using historical minute-level market data and real-time data fetched from Yahoo Finance.
+This project demonstrates a complete workflow including:
 
----
+- Historical data preprocessing  
+- Time-series modeling  
+- Forecast generation  
+- Model persistence  
+- Live inference using real-time market data  
 
-## Repository Structure
-
-
-├── requirements.txt       
-├── Bhel.py                 
-├── predict_today.py        
-
----
-
-## Technologies Used
-
-1. Python 3.9+  
-2. Pandas  
-3. NumPy  
-4. Scikit-learn  
-5. yfinance  
-6. Joblib  
+> ⚠️ This project is built strictly for educational and research purposes.
 
 ---
 
-## Model Description
+## 📂 Repository Structure
 
-Algorithm: Random Forest Regressor  
-Objective: Predict the return of the next 5-minute candle  
-
-Target Formula:  
-next_return = (next_close - current_close) / current_close  
-
-Input Features:  
-Open  
-High  
-Low  
-Close  
-Volume  
-
-Timeframe:  
-Training: Historical 5-minute candles  
-Prediction: Latest live 5-minute candle  
+```
+├── requirements.txt
+├── Bhel.py                # Model training script
+├── predict_next_day.py       # Live prediction script
+├── bhel_minute_model.pkl  # Saved trained model (generated after training)
+```
 
 ---
 
-## WorkFlow
+## 🛠 Tech Stack
 
-yfinance → pandas → numpy → scikit-learn → joblib
+- Python 3.9+
+- pandas
+- numpy
+- statsmodels
+- yfinance
 
 ---
 
-## Model Training (Bhel.py)
+## 📊 Model Overview
 
-The training script performs the following steps:
+**Algorithm Used:** ARIMA (AutoRegressive Integrated Moving Average)  
+**Model Order:** ARIMA(5,1,0)
 
-Loads historical NSE minute-level stock data  
-Cleans and converts numeric columns  
-Sorts data by timestamp to prevent data leakage  
-Engineers the next candle return as the prediction target  
-Splits data using a time-based 80/20 train-test split  
-Trains a Random Forest regression model  
-Evaluates performance using MAE, RMSE, and R² score  
-Performs a sanity check on the most recent candle  
-Saves the trained model as `bhel_minute_model.pkl`  
+The model forecasts the next day's closing price using historical daily closing prices.
 
-Command to train the model:
+### Forecast Objective
 
+The system predicts:
+
+Next Day Closing Price
+
+For live inference, it also calculates:
+
+Predicted Return = (Predicted Close - Current Close) / Current Close
+
+---
+
+## 🔄 Workflow
+
+### 1️⃣ Data Ingestion
+- Load historical CSV stock data
+- Fetch live market data via yfinance
+
+### 2️⃣ Data Processing
+- Convert `Date` column to datetime format
+- Sort data chronologically (prevents data leakage)
+- Handle missing values
+- Resample to daily frequency
+- Convert numeric columns properly
+
+### 3️⃣ Model Training
+- Fit ARIMA(5,1,0) on historical closing prices
+- Perform sanity validation
+- Save trained model as `.pkl` file
+
+### 4️⃣ Live Prediction
+- Load trained model
+- Fetch latest market data
+- Forecast next closing price
+- Calculate predicted return & % movement
+- Generate market bias signal (BUY / SELL / NO TRADE)
+
+---
+
+## 🚀 Installation
+
+### 1️⃣ Clone the Repository
+
+```
+git clone https://github.com/your-username/Stock_prediction_Model.git
+cd Stock_prediction_Model
+```
+
+### 2️⃣ Create Virtual Environment (Recommended)
+
+Windows:
+```
+python -m venv venv
+venv\Scripts\activate
+```
+
+Mac/Linux:
+```
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3️⃣ Install Dependencies
+
+```
+pip install -r requirements.txt
+```
+
+---
+
+## ▶️ Train the Model
+
+Run:
+
+```
 python Bhel.py
+```
+
+This will:
+- Train the ARIMA model
+- Save the trained model as `bhel_minute_model.pkl`
 
 ---
 
-## Live Prediction (predict_today.py)
+## 📡 Run Live Prediction
 
-The live prediction script performs real-time inference by:
+```
+python predict_next_day.py
+```
 
-Loading the saved trained model (`bhel_minute_model.pkl`)  
-Fetching live 5-minute market data for BHEL.NS  
-Predicting the next candle return and next close price  
-Calculating percentage price movement  
-Applying sanity and risk filters  
-Generating a market bias signal (BUY / SELL / NO TRADE)  
+### Sample Output
 
-Command to run live prediction:
-
-python predict_today.py
-
-Sample Output:
-
-Last Close               : 268.0  
-Predicted Return         : 0.0012  
-Predicted Next Close     : 268.32  
-Predicted % Move         : 0.1200%  
-Previous Candle % Move   : 0.2244%  
-Market Bias              : BUY 📈  
+```
+Last Close               : 268.00
+Predicted Return         : 0.0012
+Predicted Next Close     : 268.32
+Predicted % Move         : 0.1200%
+Previous Candle % Move   : 0.2244%
+Market Bias              : BUY 📈
+```
 
 ---
 
-## Risk Management
+## ⚖️ Risk Management
 
-Maximum allowed price movement per 5-minute candle is ±1%  
-Predictions exceeding this threshold are automatically rejected  
-A minimum movement threshold helps prevent over-trading during low volatility 
-
----
-
-## Installation
-
-Install all required dependencies using:
-
-pip install -r requirements.txt  
-
-Please Use a virtual environment
+- Filters out extreme predictions beyond threshold
+- Applies minimum volatility condition
+- Helps prevent over-trading during low movement periods
 
 ---
 
-## Disclaimer
+## 📌 Key Concepts Demonstrated
 
-This project is intended strictly for **educational and research purposes**.  
-It does **not constitute financial or investment advice**.  
+- Time-Series Forecasting (ARIMA)
+- Financial Data Preprocessing
+- Chronological Data Handling
+- Model Serialization using Pickle
+- Real-Time Market Data Integration
+- Structured ML Pipeline Design
+
+---
+
+## 🚧 Future Improvements
+
+- Deploy as a Streamlit dashboard
+- Add visualization for predicted vs actual prices
+- Introduce rolling backtesting
+- Support multiple NSE stocks
+- Add automated model retraining
+
+---
+
+## ⚠️ Disclaimer
+
+This project is strictly for **educational and research purposes**.
+
+It does **not** constitute financial advice or investment recommendations.  
 Do not use this system for live trading without extensive backtesting and proper risk management.  
-The author is not responsible for any financial losses incurred.
+The author assumes no responsibility for financial losses incurred.
 
 ---
 
-## Future Improvements
+## ⭐ Support
 
-Deploy as a dashboard
-Introduce Model Monitoring
-Graphical Representation of the Current and Next stock close price
-Add multiple stocks
-
-
----
-
-## Support
-
-If you find this project useful, please give it a ⭐ on GitHub.
+If you found this project useful, consider giving it a ⭐ on GitHub!
+``
